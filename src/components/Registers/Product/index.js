@@ -133,55 +133,57 @@ export const Product = (props) => {
                             />
                         </Form.Group>
                     </Form>
-                    <Table striped bordered hover>
-                        <thead>
-                            <tr>
-                                <th>
-                                    <Button className="bold" variant="black" onClick={() => handleSort("id")}>
-                                        Id. ↕
-                                    </Button>
-                                </th>
-                                <th>
-                                    <Button className="bold" variant="black" onClick={() => handleSort("product")}>
-                                        Product ↕
-                                    </Button>
-                                </th>
-                                <th>
-                                    <Button className="bold" variant="black" onClick={() => handleSort("price")}>
-                                        Price ↕
-                                    </Button>
-                                </th>
-                                <th>
-                                    <Button className="bold" variant="black" onClick={() => handleSort("type")}>
-                                        Type ↕
-                                    </Button>
-                                </th>
-                                <th>
-                                    <Button className="bold" variant="black" onClick={() => handleSort("action")}>
-                                        Action
-                                    </Button>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredProduct.map((item, index) => (
-                                <tr key={index}>
-                                    <td>{item.id}</td>
-                                    <td>{item.product}</td>
-                                    <td>${item.price}</td>
-                                    <td>{item.description}</td>
-                                    <td>
-                                        <Button className="m-1" variant="warning" onClick={() => editButton(item)}>
-                                            Edit
+                    <div className="table-responsive">
+                        <Table striped bordered hover>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <Button className="bold" variant="black" onClick={() => handleSort("id")}>
+                                            Id. ↕
                                         </Button>
-                                        <Button className="m-1" variant="danger" onClick={() => confirmButton(item)}>
-                                            Delete
+                                    </th>
+                                    <th>
+                                        <Button className="bold" variant="black" onClick={() => handleSort("product")}>
+                                            Product ↕
                                         </Button>
-                                    </td>
+                                    </th>
+                                    <th>
+                                        <Button className="bold" variant="black" onClick={() => handleSort("price")}>
+                                            Price ↕
+                                        </Button>
+                                    </th>
+                                    <th>
+                                        <Button className="bold" variant="black" onClick={() => handleSort("type")}>
+                                            Type ↕
+                                        </Button>
+                                    </th>
+                                    <th>
+                                        <Button className="bold" variant="black" onClick={() => handleSort("action")}>
+                                            Action
+                                        </Button>
+                                    </th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </Table>
+                            </thead>
+                            <tbody>
+                                {filteredProduct.map((item, index) => (
+                                    <tr key={index}>
+                                        <td>{item.id}</td>
+                                        <td>{item.product}</td>
+                                        <td>${item.price}</td>
+                                        <td>{item.description}</td>
+                                        <td>
+                                            <Button className="m-1" variant="warning" onClick={() => editButton(item)}>
+                                                Edit
+                                            </Button>
+                                            <Button className="m-1" variant="danger" onClick={() => confirmButton(item)}>
+                                                Delete
+                                            </Button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>
+                    </div>
                 </Container>
             </div >
         </>
