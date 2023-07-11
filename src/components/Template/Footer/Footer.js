@@ -1,9 +1,9 @@
 export const Footer = () => {
     return (
-        <footer class="bg-light text-center text-lg-start">
-            <div class="text-center p-3" style={{backgroundColor: "rgba(0, 0, 0, 0.2);"}}>
+        <footer className="bg-light text-center text-lg-start">
+            <div className="text-center p-3" style={{backgroundColor: "#71717133"}}>
                 © 2023 Copyright:
-                <a class="text-dark" href="https://www.linkedin.com/in/juuliocampos"> Julio Campos</a>
+                <a className="text-dark" href="https://www.linkedin.com/in/juuliocampos"> Julio Campos</a>
             </div>
         </footer>
     )
