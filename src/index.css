@@ -4,3 +4,12 @@ body {
 .bold {
     font-weight: 600;
 }
+
+div#spinner-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /* width: 95vw; */
+    /* height: 95vh; */
+    margin: 0 auto;
+}

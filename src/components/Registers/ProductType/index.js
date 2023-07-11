@@ -1,7 +1,11 @@
+import { useContext } from "react";
 import { Container, Form, Button, Table, Row, Col } from "react-bootstrap";
 import Swal from "sweetalert2";
+import { ProductTypeContext } from "../../../providers/ProductType";
 
 export const ProductType = (props) => {
+    const { productType, setProductType } = useContext(ProductTypeContext);
+
     const confirmButton = (item) => {
         Swal.fire({
             title: 'Are you sure?',
@@ -40,29 +44,6 @@ export const ProductType = (props) => {
             Swal.fire(JSON.stringify(formValues))
           }
     }
-    const mock = [
-        {
-            id: 1,
-            description: "Cano",
-            tax: "1.2",
-        },
-        {
-            id: 2,
-            description: "Eletronico",
-            tax: "1.2",
-        },
-        {
-            id: 5,
-            description: "Alvenaria",
-            tax: "1.1",
-        },
-        {
-            id: 7,
-            description: "Alimento",
-            tax: "1.5",
-        }
-    ]
-
 
     return (
         <>
@@ -102,7 +83,7 @@ export const ProductType = (props) => {
                         </thead>
                         <tbody>
                             {
-                                mock.map((item, index) => {
+                                productType.map((item, index) => {
                                     return (
                                         <tr key={index}>
                                             <td>{item.id}</td>

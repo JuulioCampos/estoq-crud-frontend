@@ -1,7 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useContext, useEffect } from "react";
 import { Container, Form, Button, Table, Col, Row } from "react-bootstrap";
 import Swal from "sweetalert2";
+import { ProductContext } from "../../../providers/Product";
+import { ProductTypeContext } from "../../../providers/ProductType";
 
 export const Product = (props) => {
+    const { product, setProduct } = useContext(ProductContext);
+    const { productType, setProductType } = useContext(ProductTypeContext);
+
     const confirmButton = (item) => {
         Swal.fire({
             title: 'Are you sure?',
@@ -29,7 +36,7 @@ export const Product = (props) => {
                 `<input style="margin: 10px;" id="swal-input2 description-edit" type="number" value="${item.price}" class="swal2-input">` +
                 `<select style="width: 88%;height: 2.625em;padding: 10px 0; border-radius: 4px; border: 2px solid lightblue;" id="swal-input3"  class="swal2-input">` +
 
-                productTypeMock.map((product, index) => {
+                productType.map((product, index) => {
                     return (
                         `<option value="${product.id}" key="${index}" ${product.id === item.product_type_id ? "selected" : ""}>${product.description}</option>`
                     )
@@ -52,56 +59,6 @@ export const Product = (props) => {
             Swal.fire(JSON.stringify(formValues))
         }
     }
-    const productsMock = [
-        {
-            id: 1,
-            product: "Cano PVC",
-            price: "21.2",
-            product_type: "Cano",
-            product_type_id: 1,
-        },
-        {
-            id: 2,
-            price: "25.52",
-            product: "Televisão",
-            product_type: "Eletronico",
-            product_type_id: 2,
-        },
-        {
-            id: 3,
-            price: "31.01",
-            product: "Mesa",
-            product_type: "Alvenaria",
-            product_type_id: 3,
-        },
-        {
-            id: 4,
-            price: "212.2",
-            product: "Banana",
-            product_type: "Alimento",
-            product_type_id: 4,
-        }
-    ]
-    // eslint-disable-next-line no-unused-vars
-    const productTypeMock = [
-        {
-            id: 1,
-            description: "cano",
-        },
-        {
-            id: 2,
-            description: "Eletronico",
-        },
-        {
-            id: 5,
-            description: "Alvenaria",
-        },
-        {
-            id: 7,
-            description: "Alimento",
-        }
-    ]
-
 
     return (
         <>
@@ -118,7 +75,7 @@ export const Product = (props) => {
                             <Form.Label>Product Type</Form.Label>
                             <Form.Select aria-label="Default select example">
                                 <option hidden>Select type</option>
-                                {productTypeMock.map((item, index) => {
+                                {productType.map((item, index) => {
                                     return (
                                         <option value={item.id} key={item.id}>{item.description}</option>
                                     )
@@ -147,13 +104,13 @@ export const Product = (props) => {
                         </thead>
                         <tbody>
                             {
-                                productsMock.map((item, index) => {
+                                product && product.map((item, index) => {
                                     return (
                                         <tr key={index}>
                                             <td>{item.id}</td>
                                             <td>{item.product}</td>
                                             <td>${item.price}</td>
-                                            <td>{item.product_type}</td>
+                                            <td>{item.description}</td>
                                             <td>
                                                 <Button className="m-1" variant="warning" onClick={() => editButton(item)}>Edit</Button>
                                                 <Button className="m-1" variant="danger" onClick={() => confirmButton(item)}>Delete</Button>

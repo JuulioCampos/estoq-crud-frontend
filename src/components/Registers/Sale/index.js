@@ -110,7 +110,7 @@ export const RegisterSale = (props) => {
                             <Form.Control
                                 type="number"
                                 id="quantity"
-                                placeholder="1"
+                                placeholder="0"
                                 min={1}
                                 max={999}
                                 onChange={(e) => {
