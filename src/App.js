@@ -4,10 +4,10 @@ import { Header } from "./components/Template/Header/Header";
 import { Footer } from "./components/Template/Footer/Footer";
 import { NotFound } from "./components/Template/NotFound/NotFound";
 import { RegistersProduct } from "./components/Registers";
+import { RegisterSale } from "./components/Registers/Sale";
 
 function App() {
   const location = useLocation().pathname;
-  console.log(location)
   return (
     <>
       <Header location={location}/>
@@ -15,7 +15,7 @@ function App() {
         <Routes>
           <Route path="/" element={<h1 className="text-center">Welcome to my App. Choose a menu</h1>}></Route>
           <Route path="/register-product" element={<RegistersProduct/>}></Route>
-          <Route path="/register-sale" element={<RegistersProduct isCurrent={location === "/register-sale"}/>}></Route>
+          <Route path="/register-sale" element={<RegisterSale />}></Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
