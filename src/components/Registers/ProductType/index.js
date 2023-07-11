@@ -32,6 +32,8 @@ export const ProductType = (props) => {
                 `<input id="swal-input1 description-edit" type="text" placeholder="${item.description}" class="swal2-input">` +
                 `<input id="swal-input2 tax-edit" type="number" value="${item.tax}" class="swal2-input">`,
             focusConfirm: false,
+            showCancelButton: true,
+            cancelButtonColor: "#d33",
             preConfirm: () => {
                 return [
                     document.getElementById("swal-input1").value,

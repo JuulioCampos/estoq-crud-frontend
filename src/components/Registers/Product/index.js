@@ -45,7 +45,7 @@ export const Product = (props) => {
             focusConfirm: false,
             confirmButtonText: "Yes, change it!",
             showCancelButton: true,
-
+            cancelButtonColor: "#d33",
             preConfirm: () => {
                 return [
                     document.getElementById("swal-input1").value,
