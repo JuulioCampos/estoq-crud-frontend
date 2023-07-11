@@ -2,7 +2,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 
-export const Header = () => {
+export const Header = (props) => {
         return (
             <Navbar expand="lg" className="bg-body-tertiary">
                 <Container>
@@ -10,9 +10,9 @@ export const Header = () => {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
-                            <Nav.Link href="/register-product">Product registration</Nav.Link>
-                            <Nav.Link href="/register-sale">Register sale</Nav.Link>
-                            <Nav.Link href="/sales">Sales</Nav.Link>
+                            <Nav.Link className={props.location === "/register-product" ? "bold": ""} href="/register-product">{props.location === "/register-product" ? '[Product registration]': "Product registration"} </Nav.Link>
+                            <Nav.Link className={props.location === "/register-sale" ? "bold": ""} href="/register-sale">{props.location === "/register-sale" ? "[Register sale]": "Register sale"}</Nav.Link>
+                            <Nav.Link className={props.location === "/sales" ? "bold": ""} href="/sales">{props.location === "/sales" ? "[Sales]": "Sales"}</Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

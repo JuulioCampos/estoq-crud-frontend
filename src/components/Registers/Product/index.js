@@ -22,37 +22,64 @@ export const Product = (props) => {
         })
     }
     const editButton = async (item) => {
-        const { value: description } = await Swal.fire({
-            input: 'text',
-            inputLabel: `Change description "${item.description}"`,
-            inputPlaceholder: "New description",
-            confirmButtonText: 'Update description!'
+        const { value: formValues } = await Swal.fire({
+            title: 'Change Product Type',
+            html:
+                `<input style="margin: 10px;" id="swal-input1 description-edit" type="text" placeholder="${item.product}" class="swal2-input">` +
+                `<input style="margin: 10px;" id="swal-input2 description-edit" type="number" value="${item.price}" class="swal2-input">` +
+                `<select style="width: 88%;height: 2.625em;padding: 10px 0; border-radius: 4px; border: 2px solid lightblue;" id="swal-input3"  class="swal2-input">` +
+
+                productTypeMock.map((product, index) => {
+                    return (
+                        `<option value="${product.id}" key="${index}" ${product.id === item.product_type_id ? "selected" : ""}>${product.description}</option>`
+                    )
+                }) +
+                `</select>`
+            ,
+            focusConfirm: false,
+            confirmButtonText: 'Yes, change it!',
+            showCancelButton: true,
+
+            preConfirm: () => {
+                return [
+                    document.getElementById('swal-input1').value,
+                    document.getElementById('swal-input2').value
+                ]
+            }
         })
 
-        if (description) {
-            Swal.fire(`Entered description: ${description}`)
+        if (formValues) {
+            Swal.fire(JSON.stringify(formValues))
         }
     }
     const productsMock = [
         {
             id: 1,
-            product: "amanco amanco",
-            productType: "cano",
+            product: "Cano PVC",
+            price: "21.2",
+            product_type: "Cano",
+            product_type_id: 1,
         },
         {
             id: 2,
+            price: "25.52",
             product: "Televisão",
-            productType: "Eletronico",
+            product_type: "Eletronico",
+            product_type_id: 2,
         },
         {
             id: 3,
+            price: "31.01",
             product: "Mesa",
-            productType: "Alvenaria",
+            product_type: "Alvenaria",
+            product_type_id: 3,
         },
         {
             id: 4,
+            price: "212.2",
             product: "Banana",
-            productType: "Alimento",
+            product_type: "Alimento",
+            product_type_id: 4,
         }
     ]
     // eslint-disable-next-line no-unused-vars
@@ -112,6 +139,7 @@ export const Product = (props) => {
                             <tr>
                                 <th>Id.</th>
                                 <th>Product</th>
+                                <th>Price</th>
                                 <th>Type</th>
                                 <th>Action</th>
 
@@ -124,7 +152,8 @@ export const Product = (props) => {
                                         <tr key={index}>
                                             <td>{item.id}</td>
                                             <td>{item.product}</td>
-                                            <td>{item.productType}</td>
+                                            <td>${item.price}</td>
+                                            <td>{item.product_type}</td>
                                             <td>
                                                 <Button className="m-1" variant="warning" onClick={() => editButton(item)}>Edit</Button>
                                                 <Button className="m-1" variant="danger" onClick={() => confirmButton(item)}>Delete</Button>

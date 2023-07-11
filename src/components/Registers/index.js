@@ -16,9 +16,6 @@ export const RegistersProduct = (props) => {
             <Tab eventKey="products" title="Products">
                 <Product />
             </Tab>
-            <Tab eventKey="percents-price" title="Percents/Price">
-                Tab content for Contact
-            </Tab>
         </Tabs>
     )
 }

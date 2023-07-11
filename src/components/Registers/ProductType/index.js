@@ -1,4 +1,4 @@
-import { Container, Form, Button, Table } from "react-bootstrap";
+import { Container, Form, Button, Table, Row, Col } from "react-bootstrap";
 import Swal from "sweetalert2";
 
 export const ProductType = (props) => {
@@ -22,33 +22,44 @@ export const ProductType = (props) => {
         })
     }
     const editButton = async (item) => {
-        const { value: description } = await Swal.fire({
-            input: 'text',
-            inputLabel: `Change description "${item.description}"`,
-            inputPlaceholder: "New description",
-            confirmButtonText: 'Update description!'
-        })
-
-        if (description) {
-            Swal.fire(`Entered description: ${description}`)
-        }
+        const { value: formValues } = await Swal.fire({
+            title: 'Change Product Type',
+            html:
+              `<input id="swal-input1 description-edit" type="text" placeholder="${item.description}" class="swal2-input">` +
+              `<input id="swal-input2 tax-edit" type="number" value="${item.tax}" class="swal2-input">`,
+            focusConfirm: false,
+            preConfirm: () => {
+              return [
+                document.getElementById('swal-input1').value,
+                document.getElementById('swal-input2').value
+              ]
+            }
+          })
+          
+          if (formValues) {
+            Swal.fire(JSON.stringify(formValues))
+          }
     }
     const mock = [
         {
             id: 1,
-            description: "cano",
+            description: "Cano",
+            tax: "1.2",
         },
         {
             id: 2,
             description: "Eletronico",
+            tax: "1.2",
         },
         {
             id: 5,
             description: "Alvenaria",
+            tax: "1.1",
         },
         {
             id: 7,
             description: "Alimento",
+            tax: "1.5",
         }
     ]
 
@@ -57,10 +68,21 @@ export const ProductType = (props) => {
         <>
             <Container>
                 <Form>
-                    <Form.Group className="mb-3" controlId="formProductType">
-                        <Form.Label>Product Type</Form.Label>
-                        <Form.Control type="text" placeholder="Description" />
-                    </Form.Group>
+                    <Row>
+                        <Col md={8}>
+                            <Form.Group className="mb-3" controlId="formProductType">
+                                <Form.Label>Product</Form.Label>
+                                <Form.Control type="text" placeholder="Product name" />
+                            </Form.Group>
+                        </Col>
+                        <Col md={4}>
+                            <Form.Label>Tax</Form.Label>
+                            <Form.Control
+                                type="number"
+                                id="tax"
+                            />
+                        </Col>
+                    </Row>
                     <Button className="mt-2">Create</Button>
                 </Form>
             </Container>
@@ -73,6 +95,7 @@ export const ProductType = (props) => {
                             <tr>
                                 <th>Id.</th>
                                 <th>Description</th>
+                                <th>Tax</th>
                                 <th>Action</th>
 
                             </tr>
@@ -84,6 +107,7 @@ export const ProductType = (props) => {
                                         <tr key={index}>
                                             <td>{item.id}</td>
                                             <td>{item.description}</td>
+                                            <td>{item.tax}</td>
                                             <td>
                                                 <Button className="m-1" variant="warning" onClick={() => editButton(item)}>Edit</Button>
                                                 <Button className="m-1" variant="danger" onClick={() => confirmButton(item)}>Delete</Button>
