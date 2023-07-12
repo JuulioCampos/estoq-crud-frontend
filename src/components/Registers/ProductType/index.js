@@ -12,7 +12,6 @@ export const ProductType = (props) => {
     const [sortConfig, setSortConfig] = useState({ column: null, direction: "asc" });
 
     const createProductType = () => {
-        console.log(description, tax)
         if (description === undefined || description === "" || tax < 0) return
 
         const json = {
@@ -78,16 +77,16 @@ export const ProductType = (props) => {
         const { value: formValues } = await Swal.fire({
             title: "Change Product Type",
             html:
-                `<input id="swal-input1 description-edit" type="text" placeholder="${$item.description}" class="swal2-input">` +
-                `<input id="swal-input2 tax-edit" type="number" value="${$item.tax}" class="swal2-input">`,
+                `<input id="swal-input1" type="text" placeholder="${$item.description}" class="description-edit swal2-input">` +
+                `<input id="swal-input2" type="number" value="${$item.tax}" class="tax-edit swal2-input">`,
             focusConfirm: false,
             showCancelButton: true,
             cancelButtonColor: "#d33",
             preConfirm: () => {
-                return [
-                    document.getElementById("swal-input1").value,
-                    document.getElementById("swal-input2").value,
-                ];
+                return {
+                    description: document.getElementById("swal-input1").value,
+                    tax: document.getElementById("swal-input2").value,
+                };
             },
         });
 
@@ -101,14 +100,24 @@ export const ProductType = (props) => {
             })
                 .then(response => response.json())
                 .then(result => {
+                    console.log(result.status === true)
+                    if(result.status === true) {
+                        return Swal.fire({
+                            title: "Product Type updated!",
+                            text: "With Success!",
+                            icon: "success",
+                            confirmButtonText: "Ok",
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    }
                     Swal.fire({
-                        title: "Product Type updated!",
-                        text: "With Success!",
-                        icon: "success",
+                        title: "Something went wrong!",
+                        text: "verify the data and try again!",
+                        icon: "error",
                         confirmButtonText: "Ok",
-                    }).then(() => {
-                        window.location.reload();
-                    });
+                    })
+
                 })
                 .catch(error => {
                     console.error('Error:', error);
