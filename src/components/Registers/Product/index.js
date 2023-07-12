@@ -110,7 +110,7 @@ export const Product = (props) => {
     };
 
     const createProduct = () => {
-        if (productName === "" || productTypeId ==- null || productPrice < 0) return
+        if (productName === "" || productTypeId === null || productPrice < 0) return
 
         const json = {
             product: productName,

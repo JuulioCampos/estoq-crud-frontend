@@ -1,19 +1,41 @@
-import { useContext, useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap"
+import { useContext, useEffect, useState } from "react";
+import { Button, Col, Container, Form, Row, Table } from "react-bootstrap"
 import Swal from "sweetalert2";
 import { ProductTypeContext } from "../../../providers/ProductType";
 import { ProductContext } from "../../../providers/Product";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 export const RegisterSale = (props) => {
     const { product } = useContext(ProductContext)
     const { productType } = useContext(ProductTypeContext)
-    
+
     const products = product;
     const productTypes = productType;
     const [productId, setProductId] = useState(null)
     const [quantity, setQuantity] = useState(1)
     const [amount, setAmount] = useState(0)
     const [tax, setTax] = useState(0)
+    const [searchText, setSearchText] = useState("")
+    const [sortConfig, setSortConfig] = useState({ column: null, direction: "asc" })
+    const [salesList, setSalesList] = useState(null)
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/api/sales')
+                const json = await response.json()
+                setSalesList(json)
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!',
+                })
+            }
+        };
+
+        fetchData()
+    }, [])
 
     const calculateTotal = () => {
         if (productId === null || quantity === null) return;
@@ -34,14 +56,56 @@ export const RegisterSale = (props) => {
                 title: 'Oops...',
                 text: 'You must fill all the fields!',
             })
-        };
-        Swal.fire({
-            icon: 'success',
-            title: 'Wooow!',
-            text: 'Sale created with success!',
-        })
-    }
+        }
+        const json = {
+            product_id: productId,
+            amount: amount,
+            quantity: quantity
+        }
 
+        fetch("http://localhost:8080/api/sales", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(json),
+        })
+            .then(response => response.json())
+            .then(result => {
+                if (result.status) {
+                    return Swal.fire({
+                        icon: 'success',
+                        title: 'Wooow!',
+                        text: 'Sale created with success!',
+                    }).then(() => {
+                        window.location.reload()
+                    })
+                }
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Wooow!',
+                    text: 'Sale created with success!',
+                })
+
+            })
+            .catch(error => {
+                console.error('Error:', error)
+            })
+    }
+    const handleSearchChange = (e) => {
+        const value = e.target.value || "";
+        setSearchText(value)
+    };
+
+    const handleSort = (column) => {
+        setSortConfig((prevSortConfig) => {
+            if (prevSortConfig.column === column && prevSortConfig.direction === "asc") {
+                return { column, direction: "desc" };
+            }
+            return { column, direction: "asc" };
+        })
+    };
+    console.log(product)
     return (
         <>
             <h1 className="text-center">Register Sale</h1>
@@ -57,7 +121,7 @@ export const RegisterSale = (props) => {
                                 }
                             } required>
                                 <option hidden>Select Here</option>
-                                {product && products.map(item => (
+                                {product && product.map(item => (
                                     <option key={item.id} value={item.id}>{item.product} </option>
                                 ))}
                             </Form.Select>
@@ -78,7 +142,7 @@ export const RegisterSale = (props) => {
                             />
                         </Col>
                         <Col md={3}>
-                            <Form.Label htmlFor="quantity">Total tax</Form.Label>
+                            <Form.Label htmlFor="tax-value">Total tax</Form.Label>
                             <Form.Control
                                 type="text"
                                 id="tax-value"
@@ -87,7 +151,7 @@ export const RegisterSale = (props) => {
                             />
                         </Col>
                         <Col md={3}>
-                            <Form.Label htmlFor="quantity">Amount</Form.Label>
+                            <Form.Label htmlFor="amount">Amount</Form.Label>
                             <Form.Control
                                 type="text"
                                 id="amount"
@@ -102,6 +166,79 @@ export const RegisterSale = (props) => {
                     }}>Create Sale</Button>
                 </Form>
             </Container>
+
+            <hr className="mt-5" />
+            <h2 className="text-center">Your Product Types</h2>
+            <div className="table-product-type-list">
+                <Container>
+                    <Form>
+                        <Form.Group className="mb-3" controlId="formSearch">
+                            <Form.Control
+                                type="text"
+                                placeholder="Search by description"
+                                value={searchText}
+                                onChange={handleSearchChange}
+                            />
+                        </Form.Group>
+                    </Form>
+                    <div className="table-responsive">
+                        <Table striped bordered hover>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <Button
+                                            className="bold"
+                                            variant="black"
+                                            onClick={() => handleSort("id")}
+                                        >
+                                            id ↕
+                                        </Button>
+                                    </th>
+                                    <th>
+                                        <Button
+                                            className="bold"
+                                            variant="black"
+                                            onClick={() => handleSort("product")}
+                                        >
+                                            Product ↕
+                                        </Button>
+                                    </th>
+                                    <th>
+                                        <Button
+                                            className="bold"
+                                            variant="black"
+                                            onClick={() => handleSort("quantity")}
+                                        >
+                                            Quantity ↕
+                                        </Button>
+                                    </th>
+                                    <th>
+                                        <Button
+                                            className="bold"
+                                            variant="black"
+                                            onClick={() => handleSort("amount")}
+                                        >
+                                            Amount ↕
+                                        </Button>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <TransitionGroup component="tbody">
+                                {salesList && salesList.map((item, index) => (
+                                    <CSSTransition key={index} classNames="fade" timeout={500}>
+                                        <tr>
+                                            <td>{item.id}</td>
+                                            <td>{item.product}</td>
+                                            <td>{item.quantity}</td>
+                                            <td>{item.amount}</td>
+                                        </tr>
+                                    </CSSTransition>
+                                ))}
+                            </TransitionGroup>
+                        </Table>
+                    </div>
+                </Container>
+            </div>
         </>
     )
 }
