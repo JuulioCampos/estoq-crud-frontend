@@ -6,7 +6,7 @@ import { useLocation } from "react-router";
 
 export const RegistersProduct = (props) => {
     const location = useLocation().pathname;
-    
+
     const [key, setKey] = useState('productType');
 
     useEffect(() => {
