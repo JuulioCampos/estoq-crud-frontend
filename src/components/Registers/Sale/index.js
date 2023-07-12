@@ -59,19 +59,23 @@ export const RegisterSale = (props) => {
     ]
     const [productId, setProductId] = useState(null);
     const [quantity, setQuantity] = useState(1);
-    const [total, setTotal] = useState(0);
+    const [amount, setAmount] = useState(0);
+    const [tax, setTax] = useState(0);
 
     const calculateTotal = () => {
         if (productId === null || quantity === null) return;
         const productPrice = products.find(item => parseInt(item.id) === parseInt(productId));
         const productType = productTypes.find(item => parseInt(item.id) === parseInt(productId));
-        const total = (productPrice.price * quantity) * productType.tax;
-        setTotal(total.toFixed(2));
+        const taxPay = (productPrice.price * quantity) * productType.tax;
+        const amount = (productPrice.price * quantity) + taxPay;
+        setTax(taxPay.toFixed(2));
+        setAmount(amount.toFixed(2));
     }
+
     const createSale = () => {
         calculateTotal();
 
-        if (productId === null || quantity === null || total === null) {
+        if (productId === null || quantity === null || amount === null) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Oops...',
@@ -91,7 +95,7 @@ export const RegisterSale = (props) => {
             <Container>
                 <Form>
                     <Row>
-                        <Col md={4}>
+                        <Col md={3}>
                             <Form.Label htmlFor="quantity">Choose a Product</Form.Label>
                             <Form.Select aria-label="Select Product" id={"product"} onChange={
                                 (e) => {
@@ -105,7 +109,7 @@ export const RegisterSale = (props) => {
                                 ))}
                             </Form.Select>
                         </Col>
-                        <Col md={3}>
+                        <Col md={2}>
                             <Form.Label htmlFor="quantity">Quantity</Form.Label>
                             <Form.Control
                                 type="number"
@@ -121,12 +125,21 @@ export const RegisterSale = (props) => {
                             />
                         </Col>
                         <Col md={3}>
-                            <Form.Label htmlFor="quantity">Total with tax</Form.Label>
+                            <Form.Label htmlFor="quantity">Total tax</Form.Label>
                             <Form.Control
                                 type="text"
-                                id="quantity"
+                                id="tax-value"
                                 disabled
-                                value={`$ ${total || "0.00"}`}
+                                value={`$ ${tax || "0.00"}`}
+                            />
+                        </Col>
+                        <Col md={3}>
+                            <Form.Label htmlFor="quantity">Amount</Form.Label>
+                            <Form.Control
+                                type="text"
+                                id="amount"
+                                disabled
+                                value={`$ ${amount || "0.00"}`}
                             />
                         </Col>
                     </Row>
