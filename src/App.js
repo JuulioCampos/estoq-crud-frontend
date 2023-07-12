@@ -81,7 +81,8 @@ function App() {
       <div style={{position:"relative", minHeight: "88vh" }}>
         <Routes>
           <Route path="/" element={<h1 className="text-center">Welcome to my App. Choose a menu</h1>}></Route>
-          <Route path="/register-product" element={<RegistersProduct/>}></Route>
+          <Route path="/register-product/product-type" element={<RegistersProduct/>}></Route>
+          <Route path="/register-product/product" element={<RegistersProduct/>}></Route>
           <Route path="/register-sale" element={<RegisterSale />}></Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -61,10 +61,13 @@ export const ProductType = (props) => {
                 })
                     .then(response => response.json())
                     .then(result => {
-                        Swal.fire(`${$item.description} was deleted`, "With Success!", "success")
-                        .then(() => {
-                            window.location.reload();
-                        });
+                        if (result.status) {
+                            return Swal.fire(`${$item.description} was deleted`, "With Success!", "success")
+                                .then(() => {
+                                    window.location.reload();
+                                });
+                        }
+                        Swal.fire(`${$item.description} can not be removed`, "delete other files associate", "fail")
                     })
                     .catch(error => {
                         Swal.fire(`${$item.description} can not be removed`, "delete other files associate", "fail")
@@ -101,7 +104,7 @@ export const ProductType = (props) => {
                 .then(response => response.json())
                 .then(result => {
                     console.log(result.status === true)
-                    if(result.status === true) {
+                    if (result.status === true) {
                         return Swal.fire({
                             title: "Product Type updated!",
                             text: "With Success!",

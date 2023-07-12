@@ -5,12 +5,15 @@ import { ProductContext } from "../../../providers/Product";
 import { ProductTypeContext } from "../../../providers/ProductType";
 
 export const Product = (props) => {
-    const { product, setProduct } = useContext(ProductContext);
-    const { productType, setProductType } = useContext(ProductTypeContext);
+    const { product } = useContext(ProductContext);
+    const { productType } = useContext(ProductTypeContext);
     const [searchText, setSearchText] = useState("");
+    const [productName, setProductName] = useState("");
+    const [productPrice, setProductPrice] = useState(0);
+    const [productTypeId, setProductTypeId] = useState(null);
     const [sortConfig, setSortConfig] = useState({ column: null, direction: "asc" });
 
-    const confirmButton = (item) => {
+    const confirmButton = ($item) => {
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -21,23 +24,39 @@ export const Product = (props) => {
             confirmButtonText: "Yes, delete it!",
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire(`${item.description} was deleted`, "With Success!", "success");
+                fetch(`http://localhost:8080/api/product-type/${$item.id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.status) {
+                            return Swal.fire(`Product was deleted`, "With Success!", "success")
+                                .then(() => {
+                                    window.location.reload();
+                                });
+                        }
+                        Swal.fire(`Product can not be removed`, "delete other files associate", "fail")
+                    })
+                    .catch(error => {
+                        Swal.fire(`Product can not be removed`, "delete other files associate in Sales", "fail")
+                    });
             }
         });
     };
 
-    const editButton = async (item) => {
+    const editButton = async ($item) => {
         const { value: formValues } = await Swal.fire({
             title: "Change Product Type",
             html:
-                `<input style="margin: 10px;" id="swal-input1 description-edit" type="text" placeholder="${item.product}" class="swal2-input">` +
-                `<input style="margin: 10px;" id="swal-input2 description-edit" type="number" value="${item.price}" class="swal2-input">` +
+                `<input style="margin: 10px;" id="swal-input1" type="text" placeholder="${$item.product}" class="swal2-input">` +
+                `<input style="margin: 10px;" id="swal-input2" type="number" value="${$item.price}" class="swal2-input">` +
                 `<select style="width: 88%;height: 2.625em;padding: 10px 0; border-radius: 4px; border: 2px solid lightblue;" id="swal-input3"  class="swal2-input">` +
-
-                productType &&
                 productType.map((product, index) => {
                     return (
-                        `<option value="${product.id}" key="${index}" ${product.id === item.product_type_id ? "selected" : ""
+                        `<option value="${product.id}" key="${index}" ${product.id === $item.product_type_id ? "selected" : ""
                         }>${product.description}</option>`
                     );
                 }) +
@@ -47,17 +66,80 @@ export const Product = (props) => {
             showCancelButton: true,
             cancelButtonColor: "#d33",
             preConfirm: () => {
-                return [
-                    document.getElementById("swal-input1").value,
-                    document.getElementById("swal-input2").value,
-                ];
+                return {
+                    product: document.getElementById("swal-input1").value,
+                    price: document.getElementById("swal-input2").value,
+                    product_type_id: document.getElementById("swal-input3").value,
+                };
             },
         });
 
         if (formValues) {
-            Swal.fire(JSON.stringify(formValues));
+            fetch(`http://localhost:8080/api/product/${$item.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formValues),
+            })
+                .then(response => response.json())
+                .then(result => {
+                    console.log(result.status === true)
+                    if (result.status === true) {
+                        return Swal.fire({
+                            title: "Product updated!",
+                            text: "With Success!",
+                            icon: "success",
+                            confirmButtonText: "Ok",
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    }
+                    Swal.fire({
+                        title: "Something went wrong!",
+                        text: "verify the data and try again!",
+                        icon: "error",
+                        confirmButtonText: "Ok",
+                    })
+
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
     };
+
+    const createProduct = () => {
+        if (productName === "" || productTypeId ==- null || productPrice < 0) return
+
+        const json = {
+            product: productName,
+            price: productPrice,
+            product_type_id: productTypeId,
+        }
+
+        fetch("http://localhost:8080/api/product", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(json),
+        })
+            .then(response => response.json())
+            .then(result => {
+                Swal.fire({
+                    title: "Product created!",
+                    text: "With Success!",
+                    icon: "success",
+                    confirmButtonText: "Ok",
+                }).then(() => {
+                    window.location.reload();
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
 
     const handleSearchChange = (e) => {
         const value = e.target.value || "";
@@ -94,15 +176,21 @@ export const Product = (props) => {
             <Container>
                 <Form>
                     <Row>
-                        <Col md={8}>
+                        <Col md={5}>
                             <Form.Group className="mb-3" controlId="formProductType">
                                 <Form.Label>Product</Form.Label>
-                                <Form.Control type="text" placeholder="Product name" />
+                                <Form.Control onChange={(e) => setProductName(e.target.value)} type="text" placeholder="Product name" />
+                            </Form.Group>
+                        </Col>
+                        <Col md={3}>
+                            <Form.Group className="mb-3" controlId="formProductType">
+                                <Form.Label>Price</Form.Label>
+                                <Form.Control onChange={(e) => setProductPrice(e.target.value)} type="number" placeholder="Price" />
                             </Form.Group>
                         </Col>
                         <Col md={4}>
                             <Form.Label>Product Type</Form.Label>
-                            <Form.Select aria-label="Default select example">
+                            <Form.Select onChange={(e) => setProductTypeId(e.target.value)}>
                                 <option hidden>Select type</option>
                                 {productType &&
                                     productType.map((item, index) => {
@@ -112,11 +200,13 @@ export const Product = (props) => {
                                             </option>
                                         );
                                     })}
-                                <option value="2">Two</option>
                             </Form.Select>
                         </Col>
                     </Row>
-                    <Button className="mt-2">Create</Button>
+                    <Button onClick={(e) => {
+                        e.preventDefault()
+                        createProduct();
+                    }} className="mt-2">Create</Button>
                 </Form>
             </Container>
             <hr className="mt-5" />

@@ -1,62 +1,15 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap"
 import Swal from "sweetalert2";
+import { ProductTypeContext } from "../../../providers/ProductType";
+import { ProductContext } from "../../../providers/Product";
 
 export const RegisterSale = (props) => {
-
-    const products = [
-        {
-            id: 1,
-            product: "Cano PVC",
-            price: "21.2",
-            product_type: "Cano",
-            product_type_id: 1,
-        },
-        {
-            id: 2,
-            price: "25.52",
-            product: "Televisão",
-            product_type: "Eletronico",
-            product_type_id: 2,
-        },
-        {
-            id: 3,
-            price: "31.01",
-            product: "Mesa",
-            product_type: "Alvenaria",
-            product_type_id: 5,
-        },
-        {
-            id: 4,
-            price: "212.2",
-            product: "Banana",
-            product_type: "Alimento",
-            product_type_id: 7,
-        }
-    ]
-
-    const productTypes = [
-        {
-            id: 1,
-            description: "Cano",
-            tax: "1.2",
-        },
-        {
-            id: 2,
-            description: "Eletronico",
-            tax: "1.2",
-        },
-        {
-            id: 5,
-            description: "Alvenaria",
-            tax: "1.1",
-        },
-        {
-            id: 7,
-            description: "Alimento",
-            tax: "1.5",
-        }
-    ]
+    const { product } = useContext(ProductContext);
+    const { productType } = useContext(ProductTypeContext);
+    
+    const products = product;
+    const productTypes = productType;
     const [productId, setProductId] = useState(null);
     const [quantity, setQuantity] = useState(1);
     const [amount, setAmount] = useState(0);
@@ -104,7 +57,7 @@ export const RegisterSale = (props) => {
                                 }
                             } required>
                                 <option hidden>Select Here</option>
-                                {products.map(item => (
+                                {product && products.map(item => (
                                     <option key={item.id} value={item.id}>{item.product} </option>
                                 ))}
                             </Form.Select>
