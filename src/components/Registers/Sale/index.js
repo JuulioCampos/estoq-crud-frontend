@@ -5,28 +5,28 @@ import { ProductTypeContext } from "../../../providers/ProductType";
 import { ProductContext } from "../../../providers/Product";
 
 export const RegisterSale = (props) => {
-    const { product } = useContext(ProductContext);
-    const { productType } = useContext(ProductTypeContext);
+    const { product } = useContext(ProductContext)
+    const { productType } = useContext(ProductTypeContext)
     
     const products = product;
     const productTypes = productType;
-    const [productId, setProductId] = useState(null);
-    const [quantity, setQuantity] = useState(1);
-    const [amount, setAmount] = useState(0);
-    const [tax, setTax] = useState(0);
+    const [productId, setProductId] = useState(null)
+    const [quantity, setQuantity] = useState(1)
+    const [amount, setAmount] = useState(0)
+    const [tax, setTax] = useState(0)
 
     const calculateTotal = () => {
         if (productId === null || quantity === null) return;
-        const productPrice = products.find(item => parseInt(item.id) === parseInt(productId));
-        const productType = productTypes.find(item => parseInt(item.id) === parseInt(productId));
+        const productPrice = products.find(item => parseInt(item.id) === parseInt(productId))
+        const productType = productTypes.find(item => parseInt(item.id) === parseInt(productId))
         const taxPay = (productPrice.price * quantity) * productType.tax;
         const amount = (productPrice.price * quantity) + taxPay;
-        setTax(taxPay.toFixed(2));
-        setAmount(amount.toFixed(2));
+        setTax(taxPay.toFixed(2))
+        setAmount(amount.toFixed(2))
     }
 
     const createSale = () => {
-        calculateTotal();
+        calculateTotal()
 
         if (productId === null || quantity === null || amount === null) {
             Swal.fire({
@@ -97,8 +97,8 @@ export const RegisterSale = (props) => {
                         </Col>
                     </Row>
                     <Button type={"submit"} className="mt-2" onClick={(e) => {
-                        e.preventDefault();
-                        createSale();
+                        e.preventDefault()
+                        createSale()
                     }}>Create Sale</Button>
                 </Form>
             </Container>

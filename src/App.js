@@ -1,5 +1,5 @@
 import { Route, Routes, useLocation } from "react-router";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
 import { Header } from "./components/Template/Header/Header";
 import { Footer } from "./components/Template/Footer/Footer";
 import { NotFound } from "./components/Template/NotFound/NotFound";
@@ -14,61 +14,61 @@ import { ProductContext } from "./providers/Product";
 
 function App() {
   const location = useLocation().pathname;
-  const { productType, setProductType } = useContext(ProductTypeContext);
-  const { product, setProduct } = useContext(ProductContext);
-  const {isLoading, setIsLoading} = useContext(LoadingContext);
+  const { productType, setProductType } = useContext(ProductTypeContext)
+  const { product, setProduct } = useContext(ProductContext)
+  const {isLoading, setIsLoading} = useContext(LoadingContext)
 
   useEffect(() => {
     const fetchData = async () => {
       if (!productType) {
         try {
-          const response = await fetch('http://localhost:8080/api/product-type');
-          const json = await response.json();
-          setProductType(json);
+          const response = await fetch('http://localhost:8080/api/product-type')
+          const json = await response.json()
+          setProductType(json)
         } catch (error) {
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
             text: 'Something went wrong!',
-          });
+          })
         }
       }
       
-      setIsLoading(false);
+      setIsLoading(false)
     };
 
-    fetchData();
+    fetchData()
 
     return () => {
       // Cancelar a requisição, se necessário
     };
-  }, [productType, setIsLoading, setProductType]);
+  }, [productType, setIsLoading, setProductType])
 
   useEffect(() => {
     const fetchData = async () => {
       if (!product) {
         try {
-          const response = await fetch('http://localhost:8080/api/product');
-          const json = await response.json();
-          setProduct(json);
+          const response = await fetch('http://localhost:8080/api/product')
+          const json = await response.json()
+          setProduct(json)
         } catch (error) {
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
             text: 'Something went wrong!',
-          });
+          })
         }
       }
       
-      setIsLoading(false);
+      setIsLoading(false)
     };
 
-    fetchData();
+    fetchData()
 
     return () => {
       // Cancelar a requisição, se necessário
     };
-  }, [product, setIsLoading, setProduct]);
+  }, [product, setIsLoading, setProduct])
 
 
   if (isLoading) {
@@ -89,7 +89,7 @@ function App() {
       </div>
       <Footer />
     </>
-  );
+  )
 }
 
 export default App;

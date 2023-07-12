@@ -5,13 +5,13 @@ import { ProductContext } from "../../../providers/Product";
 import { ProductTypeContext } from "../../../providers/ProductType";
 
 export const Product = (props) => {
-    const { product } = useContext(ProductContext);
-    const { productType } = useContext(ProductTypeContext);
-    const [searchText, setSearchText] = useState("");
-    const [productName, setProductName] = useState("");
-    const [productPrice, setProductPrice] = useState(0);
-    const [productTypeId, setProductTypeId] = useState(null);
-    const [sortConfig, setSortConfig] = useState({ column: null, direction: "asc" });
+    const { product } = useContext(ProductContext)
+    const { productType } = useContext(ProductTypeContext)
+    const [searchText, setSearchText] = useState("")
+    const [productName, setProductName] = useState("")
+    const [productPrice, setProductPrice] = useState(0)
+    const [productTypeId, setProductTypeId] = useState(null)
+    const [sortConfig, setSortConfig] = useState({ column: null, direction: "asc" })
 
     const confirmButton = ($item) => {
         Swal.fire({
@@ -35,16 +35,16 @@ export const Product = (props) => {
                         if (result.status) {
                             return Swal.fire(`Product was deleted`, "With Success!", "success")
                                 .then(() => {
-                                    window.location.reload();
-                                });
+                                    window.location.reload()
+                                })
                         }
                         Swal.fire(`Product can not be removed`, "delete other files associate", "fail")
                     })
                     .catch(error => {
                         Swal.fire(`Product can not be removed`, "delete other files associate in Sales", "fail")
-                    });
+                    })
             }
-        });
+        })
     };
 
     const editButton = async ($item) => {
@@ -58,7 +58,7 @@ export const Product = (props) => {
                     return (
                         `<option value="${product.id}" key="${index}" ${product.id === $item.product_type_id ? "selected" : ""
                         }>${product.description}</option>`
-                    );
+                    )
                 }) +
                 `</select>`,
             focusConfirm: false,
@@ -72,7 +72,7 @@ export const Product = (props) => {
                     product_type_id: document.getElementById("swal-input3").value,
                 };
             },
-        });
+        })
 
         if (formValues) {
             fetch(`http://localhost:8080/api/product/${$item.id}`, {
@@ -92,8 +92,8 @@ export const Product = (props) => {
                             icon: "success",
                             confirmButtonText: "Ok",
                         }).then(() => {
-                            window.location.reload();
-                        });
+                            window.location.reload()
+                        })
                     }
                     Swal.fire({
                         title: "Something went wrong!",
@@ -104,8 +104,8 @@ export const Product = (props) => {
 
                 })
                 .catch(error => {
-                    console.error('Error:', error);
-                });
+                    console.error('Error:', error)
+                })
         }
     };
 
@@ -133,17 +133,17 @@ export const Product = (props) => {
                     icon: "success",
                     confirmButtonText: "Ok",
                 }).then(() => {
-                    window.location.reload();
-                });
+                    window.location.reload()
+                })
             })
             .catch(error => {
-                console.error('Error:', error);
-            });
+                console.error('Error:', error)
+            })
     }
 
     const handleSearchChange = (e) => {
         const value = e.target.value || "";
-        setSearchText(value);
+        setSearchText(value)
     };
 
     const handleSort = (column) => {
@@ -152,7 +152,7 @@ export const Product = (props) => {
                 return { column, direction: "desc" };
             }
             return { column, direction: "asc" };
-        });
+        })
     };
 
     const sortedProduct = product
@@ -169,7 +169,7 @@ export const Product = (props) => {
 
     const filteredProduct = sortedProduct.filter((item) =>
         item.product.toLowerCase().includes(searchText.toLowerCase())
-    );
+    )
 
     return (
         <>
@@ -198,14 +198,14 @@ export const Product = (props) => {
                                             <option value={item.id} key={item.id}>
                                                 {item.description}
                                             </option>
-                                        );
+                                        )
                                     })}
                             </Form.Select>
                         </Col>
                     </Row>
                     <Button onClick={(e) => {
                         e.preventDefault()
-                        createProduct();
+                        createProduct()
                     }} className="mt-2">Create</Button>
                 </Form>
             </Container>
@@ -277,5 +277,5 @@ export const Product = (props) => {
                 </Container>
             </div >
         </>
-    );
+    )
 };

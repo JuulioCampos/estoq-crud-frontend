@@ -5,11 +5,11 @@ import { ProductTypeContext } from "../../../providers/ProductType";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 export const ProductType = (props) => {
-    const { productType } = useContext(ProductTypeContext);
-    const [searchText, setSearchText] = useState("");
-    const [description, setDescription] = useState(undefined);
-    const [tax, setTax] = useState(0);
-    const [sortConfig, setSortConfig] = useState({ column: null, direction: "asc" });
+    const { productType } = useContext(ProductTypeContext)
+    const [searchText, setSearchText] = useState("")
+    const [description, setDescription] = useState(undefined)
+    const [tax, setTax] = useState(0)
+    const [sortConfig, setSortConfig] = useState({ column: null, direction: "asc" })
 
     const createProductType = () => {
         if (description === undefined || description === "" || tax < 0) return
@@ -34,12 +34,12 @@ export const ProductType = (props) => {
                     icon: "success",
                     confirmButtonText: "Ok",
                 }).then(() => {
-                    window.location.reload();
-                });
+                    window.location.reload()
+                })
             })
             .catch(error => {
-                console.error('Error:', error);
-            });
+                console.error('Error:', error)
+            })
     }
 
     const confirmButton = ($item) => {
@@ -64,16 +64,16 @@ export const ProductType = (props) => {
                         if (result.status) {
                             return Swal.fire(`${$item.description} was deleted`, "With Success!", "success")
                                 .then(() => {
-                                    window.location.reload();
-                                });
+                                    window.location.reload()
+                                })
                         }
                         Swal.fire(`${$item.description} can not be removed`, "delete other files associate", "fail")
                     })
                     .catch(error => {
                         Swal.fire(`${$item.description} can not be removed`, "delete other files associate", "fail")
-                    });
+                    })
             }
-        });
+        })
     };
 
     const editButton = async ($item) => {
@@ -91,7 +91,7 @@ export const ProductType = (props) => {
                     tax: document.getElementById("swal-input2").value,
                 };
             },
-        });
+        })
 
         if (formValues) {
             fetch(`http://localhost:8080/api/product-type/${$item.id}`, {
@@ -111,8 +111,8 @@ export const ProductType = (props) => {
                             icon: "success",
                             confirmButtonText: "Ok",
                         }).then(() => {
-                            window.location.reload();
-                        });
+                            window.location.reload()
+                        })
                     }
                     Swal.fire({
                         title: "Something went wrong!",
@@ -123,14 +123,14 @@ export const ProductType = (props) => {
 
                 })
                 .catch(error => {
-                    console.error('Error:', error);
-                });
+                    console.error('Error:', error)
+                })
         }
     };
 
     const handleSearchChange = (e) => {
         const value = e.target.value || "";
-        setSearchText(value);
+        setSearchText(value)
     };
 
     const handleSort = (column) => {
@@ -139,7 +139,7 @@ export const ProductType = (props) => {
                 return { column, direction: "desc" };
             }
             return { column, direction: "asc" };
-        });
+        })
     };
 
     const sortedProductType = productType
@@ -156,7 +156,7 @@ export const ProductType = (props) => {
 
     const filteredProductType = sortedProductType.filter((item) =>
         item.description.toLowerCase().includes(searchText.toLowerCase())
-    );
+    )
 
     return (
         <>
@@ -265,5 +265,5 @@ export const ProductType = (props) => {
                 </Container>
             </div>
         </>
-    );
+    )
 };

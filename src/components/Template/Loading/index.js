@@ -1,4 +1,4 @@
-import './index.css';
+import './index.css'
 export const Loading = (props) => {
     return (
         <div id='spinner-loading'>

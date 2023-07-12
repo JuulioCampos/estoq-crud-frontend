@@ -1,26 +1,26 @@
-import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import React, { useState } from 'react'
+import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
+import Form from 'react-bootstrap/Form'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 
 export const ModalForm = (props) => {
-  const [formValues, setFormValues] = useState({});
-  const [showModal, setShowModal] = useState(true); // Estado para controlar a exibição do modal
+  const [formValues, setFormValues] = useState({})
+  const [showModal, setShowModal] = useState(true) // Estado para controlar a exibição do modal
 
   const handleChange = (event, id) => {
     const { value } = event.target;
-    setFormValues((prevValues) => ({ ...prevValues, [id]: value }));
+    setFormValues((prevValues) => ({ ...prevValues, [id]: value }))
   };
 
   const handleSave = () => {
-    props.onSave(formValues);
-    setShowModal(false);
+    props.onSave(formValues)
+    setShowModal(false)
   };
 
   const handleClose = () => {
-    setShowModal(false);
+    setShowModal(false)
   };
 
   return (
@@ -82,5 +82,5 @@ export const ModalForm = (props) => {
         </Button>
       </Modal.Footer>
     </Modal>
-  );
+  )
 };
