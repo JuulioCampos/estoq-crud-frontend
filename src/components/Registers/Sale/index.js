@@ -168,7 +168,7 @@ export const RegisterSale = (props) => {
             </Container>
 
             <hr className="mt-5" />
-            <h2 className="text-center">Your Product Types</h2>
+            <h2 className="text-center">Your Sales</h2>
             <div className="table-product-type-list">
                 <Container>
                     <Form>
